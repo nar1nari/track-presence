@@ -5,6 +5,7 @@ edition = "2024"
 description = "Shows your current music on Discord, with support for multiple media players"
 authors = ["nar1nari"]
 license = "MIT"
+repository = "https://github.com/nar1nari/track-presence"
 readme = "README.md"
 categories = ["multimedia::audio", "command-line-utilities"]
 keywords = ["discord", "music", "mpris"]
