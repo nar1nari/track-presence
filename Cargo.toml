@@ -1,0 +1,30 @@
+[package]
+name = "track_presence"
+version = "0.1.0"
+edition = "2024"
+description = "Shows your current music on Discord, with support for multiple media players"
+authors = ["nar1nari"]
+license = "MIT"
+readme = "README.md"
+categories = ["multimedia::audio", "command-line-utilities"]
+keywords = ["discord", "music", "mpris"]
+
+[features]
+default = ["mpris"]
+mpris = ["dep:mpris"]
+
+[profile.release]
+opt-level = "z"
+strip = true
+lto = true
+codegen-units = 1
+panic = "abort"
+
+[[bin]]
+name = "trackpresence"
+path = "src/main.rs"
+
+[dependencies]
+clap = { version = "4.5.54", features = ["derive"] }
+discord-rich-presence = "1.0.0"
+mpris = { version = "2.0.1", optional = true }
