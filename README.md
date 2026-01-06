@@ -52,7 +52,7 @@ See all options with `trackpresence --help`.
 
 # Contributing
 
-We welcome contributions! Currently, the biggest need is adding support for more music players.
+Contributions are welcome! Currently, the biggest need is adding support for more music players.
 
 Steps to add a new player:
 
@@ -65,4 +65,5 @@ Your contributions will make Track Presence more versatile for everyone.
 # License
 
 [![Licence](https://img.shields.io/github/license/Ileriayo/markdown-badges?style=for-the-badge)](./LICENSE)
+
 See [LICENSE](./LICENSE) for details.
