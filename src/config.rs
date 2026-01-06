@@ -49,7 +49,7 @@ pub struct Config {
     #[arg(
         long,
         value_delimiter = ',',
-        default_value = "Mozilla firefox,chromium,mpv,VLC media player,Spotify"
+        default_value = "Mozilla firefox,chromium,mpv,VLC media player,Spotify,Telegram Desktop"
     )]
     pub known_players: Vec<String>,
 }
