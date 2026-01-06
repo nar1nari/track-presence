@@ -56,9 +56,9 @@ We welcome contributions! Currently, the biggest need is adding support for more
 
 Steps to add a new player:
 
-1. Create a module in [/src/sources/](./src/sources/) (e.g. [mpris.rs](./src/sources/mpris.rs))
-2. Add a corresponding Cargo feature for the module to allow selection during compilation.
-3. Add a module to the list in [/src/app.rs](./src/app.rs)
+1. Create new source in [/src/sources/](./src/sources/) (e.g. [mpris.rs](./src/sources/mpris.rs))
+2. Add a corresponding Cargo feature for the source to allow selection during compilation.
+3. Add a source to the list in [/src/main.rs](./src/main.rs)
 
 Your contributions will make Track Presence more versatile for everyone.
 
