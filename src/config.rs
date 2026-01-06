@@ -1,6 +1,7 @@
 use clap::Parser;
 
 use crate::track::Track;
+use crate::utils::normalize_string;
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -56,12 +57,12 @@ pub struct Config {
 
 impl Config {
     pub fn get_player_image(&self, player: &str) -> String {
-        let player = player.to_lowercase().replace(' ', "");
+        let player = normalize_string(player);
 
         if self
             .known_players
             .iter()
-            .any(|p| p.to_lowercase().replace(' ', "") == player)
+            .any(|p| normalize_string(p) == player)
         {
             player
         } else {
@@ -70,10 +71,12 @@ impl Config {
     }
 
     pub fn excluded(&self, track: &Track) -> bool {
-        let normalize = |s: &str| s.to_lowercase().replace(' ', "");
-
-        let player = normalize(&track.player);
-        if self.excluded_players.iter().any(|p| normalize(p) == player) {
+        let player = normalize_string(&track.player);
+        if self
+            .excluded_players
+            .iter()
+            .any(|p| normalize_string(p) == player)
+        {
             return true;
         }
 
