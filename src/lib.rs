@@ -1,3 +1,4 @@
+pub mod album_art;
 pub mod app;
 pub mod config;
 pub mod presentation;

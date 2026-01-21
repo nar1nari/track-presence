@@ -1,4 +1,4 @@
-use crate::{config::Config, state::PlaybackState, track::Track};
+use crate::{album_art::AlbumArtProvider, config::Config, state::PlaybackState, track::Track};
 use discord_rich_presence::{
     DiscordIpc, DiscordIpcClient, activity::Timestamps, error::Error as RpcError,
 };
@@ -14,9 +14,14 @@ impl DiscordPresenter {
         Ok(Self { client })
     }
 
-    pub fn ensure_update(&mut self, state: &PlaybackState, config: &Config) {
+    pub fn ensure_update(
+        &mut self,
+        state: &PlaybackState,
+        config: &Config,
+        album_art_provider: &mut AlbumArtProvider,
+    ) {
         loop {
-            match self.update(state, config) {
+            match self.update(state, config, album_art_provider) {
                 Ok(_) => return,
                 Err(e) => {
                     eprintln!("Discord RPC error: {e}. Attempting to reconnect...");
@@ -32,7 +37,12 @@ impl DiscordPresenter {
         }
     }
 
-    pub fn update(&mut self, state: &PlaybackState, config: &Config) -> Result<(), RpcError> {
+    pub fn update(
+        &mut self,
+        state: &PlaybackState,
+        config: &Config,
+        album_art_provider: &mut AlbumArtProvider,
+    ) -> Result<(), RpcError> {
         use discord_rich_presence::activity::{Activity, ActivityType, Assets, StatusDisplayType};
 
         let track = match state {
@@ -55,9 +65,10 @@ impl DiscordPresenter {
             payload = payload.state(&artists_str);
         }
 
+        let album_art = album_art_provider.get_album_art(track);
         let small_image = config.get_player_image(&track.player);
         let assets = Assets::new()
-            .large_image("icon")
+            .large_image(album_art.url())
             .small_image(&small_image)
             .small_text(&track.player);
         payload = payload.assets(assets);

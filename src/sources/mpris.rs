@@ -19,6 +19,7 @@ impl TrackSource for MprisSource {
             player: player.identity().to_string(),
             title,
             url: metadata.url().map(|s| s.to_string()),
+            album: metadata.album_name().map(|s| s.to_string()),
             artists: metadata
                 .artists()
                 .map(|v| v.iter().map(|s| s.to_string()).collect()),

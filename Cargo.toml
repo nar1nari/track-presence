@@ -11,8 +11,9 @@ categories = ["multimedia::audio", "command-line-utilities"]
 keywords = ["discord", "music", "mpris"]
 
 [features]
-default = ["mpris"]
+default = ["mpris", "musicbrainz"]
 mpris = ["dep:mpris"]
+musicbrainz = ["reqwest"]
 
 [profile.release]
 opt-level = "z"
@@ -29,3 +30,4 @@ path = "src/main.rs"
 clap = { version = "4.5.54", features = ["derive"] }
 discord-rich-presence = "1.0.0"
 mpris = { version = "2.0.1", optional = true }
+reqwest = { version = "0.13.1", features = ["blocking"], optional = true }

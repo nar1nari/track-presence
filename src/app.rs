@@ -1,11 +1,12 @@
 use crate::{
-    config::Config, presentation::discord::DiscordPresenter, sources::TrackSource,
-    state::PlaybackState,
+    album_art::AlbumArtProvider, config::Config, presentation::discord::DiscordPresenter,
+    sources::TrackSource, state::PlaybackState,
 };
 
 pub struct App {
     config: Config,
     sources: Box<[Box<dyn TrackSource>]>,
+    album_art_provider: AlbumArtProvider,
     playback_state: PlaybackState,
 }
 
@@ -14,6 +15,7 @@ impl App {
         Self {
             config,
             sources,
+            album_art_provider: AlbumArtProvider::default(),
             playback_state: PlaybackState::Stopped,
         }
     }
@@ -42,7 +44,7 @@ impl App {
                 .unwrap_or(PlaybackState::Stopped);
 
             if new_state != self.playback_state {
-                presenter.ensure_update(&new_state, &self.config);
+                presenter.ensure_update(&new_state, &self.config, &mut self.album_art_provider);
                 self.playback_state = new_state;
             }
 

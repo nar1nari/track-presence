@@ -107,7 +107,6 @@ impl Config {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::track::Track;
 
     fn base_config() -> Config {
         Config {
@@ -127,6 +126,7 @@ mod tests {
             player: String::new(),
             title: String::new(),
             url: None,
+            album: None,
             artists: None,
             position: None,
             length: None,
