@@ -1,6 +1,6 @@
 [package]
 name = "track_presence"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 description = "Shows your current music on Discord, with support for multiple media players"
 authors = ["nar1nari"]

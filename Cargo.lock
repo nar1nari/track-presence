@@ -1579,7 +1579,7 @@ dependencies = [
 
 [[package]]
 name = "track_presence"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "clap",
  "discord-rich-presence",
