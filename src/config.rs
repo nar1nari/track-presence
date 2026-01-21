@@ -47,6 +47,8 @@ pub struct Config {
     /// Comma-separated list of media players with supported icons
     ///
     /// Only use this when a custom Client ID is specified.
+    /// This argument is used to retrieve icons from the Discord Developer Portal.
+    /// Icon names must be lowercase, without special characters.
     #[arg(
         long,
         value_delimiter = ',',
