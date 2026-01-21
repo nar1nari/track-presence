@@ -10,6 +10,7 @@
 - ✅ Supports multiple players (currently via MPRIS)
 - ✅ Exclusion options for players, artists, tracks, and URLs
 - ✅ Optional custom Discord Client ID
+- ✅ Album art support via MusicBrainz
 
 # Installation
 
@@ -28,6 +29,21 @@ trackpresence
 ```
 
 To launch at system startup, add `trackpresence` to your autostart configuration.
+
+# Cargo features
+
+| Feature       | Description                                | Default  |
+| ------------- | ------------------------------------------ | -------- |
+| `mpris`       | Enables MPRIS player support               | ✅ Yes   |
+| `musicbrainz` | Enables album art fetching via MusicBrainz | ✅ Yes   |
+
+If you don't want to connect to MusicBrainz to fetch album art, you can disable this feature accordingly:
+
+```bash
+cargo install track_presence --no-default-features --features mpris
+```
+
+But note that album art will not appear in rich presence.
 
 # Usage
 
@@ -50,17 +66,11 @@ Advanced users can use a custom Discord Client ID.
 
 See all options with `trackpresence --help`.
 
-# Contributing
+# Future Plans
 
-Contributions are welcome! Currently, the biggest need is adding support for more music players.
-
-Steps to add a new player:
-
-1. Create new source in [/src/sources/](./src/sources/) (e.g. [mpris.rs](./src/sources/mpris.rs))
-2. Add a corresponding Cargo feature for the source to allow selection during compilation.
-3. Add a source to the list in [/src/main.rs](./src/main.rs)
-
-Your contributions will make Track Presence more versatile for everyone.
+- Windows API support
+- MPD player support
+- MacOS support
 
 # License
 
