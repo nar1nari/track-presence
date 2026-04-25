@@ -1,6 +1,6 @@
 [package]
 name = "track_presence"
-version = "0.1.1"
+version = "1.0.0"
 edition = "2024"
 description = "Shows your current music on Discord, with support for multiple media players"
 authors = ["nar1nari"]
@@ -11,8 +11,9 @@ categories = ["multimedia::audio", "command-line-utilities"]
 keywords = ["discord", "music", "mpris"]
 
 [features]
-default = ["mpris", "musicbrainz"]
+default = ["musicbrainz"]
 mpris = ["dep:mpris"]
+windows_media = ["dep:windows", "dep:winreg"]
 musicbrainz = ["reqwest"]
 
 [profile.release]
@@ -27,7 +28,13 @@ name = "trackpresence"
 path = "src/main.rs"
 
 [dependencies]
-clap = { version = "4.5.54", features = ["derive"] }
-discord-rich-presence = "1.0.0"
-mpris = { version = "2.0.1", optional = true }
-reqwest = { version = "0.13.1", features = ["blocking"], optional = true }
+clap = { version = "4.6.1", features = ["derive"] }
+discord-rich-presence = "1.1.0"
+mpris = { version = "2.1.0", optional = true }
+windows = { version = "0.58.0", features = [
+    "Media_Control",
+    "Foundation",
+    "Win32_UI_Shell"
+], optional = true }
+winreg = { version = "0.56.0", optional = true }
+reqwest = { version = "0.13.2", features = ["blocking"], optional = true }

@@ -7,19 +7,17 @@
 - ✅ Lightweight, low CPU & RAM usage
 - ✅ Fully local — no external connections
 - ✅ Modular — pick only the music players you want
-- ✅ Supports multiple players (currently via MPRIS)
+- ✅ Supports multiple players
 - ✅ Exclusion options for players, artists, tracks, and URLs
 - ✅ Optional custom Discord Client ID
 - ✅ Album art support via MusicBrainz
 
 # Installation
 
-> **Linux only (for now).** Track Presence currently supports **MPRIS**. Support for other OSes and additional players will come in future updates.
-
 Install with Cargo package manager:
 
 ```bash
-cargo install track_presence
+cargo install track_presence --features {mpris/windows_media}
 ```
 
 Run Track Presence:
@@ -32,10 +30,11 @@ To launch at system startup, add `trackpresence` to your autostart configuration
 
 # Cargo features
 
-| Feature       | Description                                | Default  |
-| ------------- | ------------------------------------------ | -------- |
-| `mpris`       | Enables MPRIS player support               | ✅ Yes   |
-| `musicbrainz` | Enables album art fetching via MusicBrainz | ✅ Yes   |
+| Feature         | Description                                | Default  |
+| --------------- | ------------------------------------------ | -------- |
+| `mpris`         | Enables MPRIS player support               | ❌ No    |
+| `windows_media` | Enables Windows Media player support       | ❌ No    |
+| `musicbrainz`   | Enables album art fetching via MusicBrainz | ✅ Yes   |
 
 If you don't want to connect to MusicBrainz to fetch album art, you can disable this feature accordingly:
 
@@ -54,7 +53,7 @@ Track Presence runs entirely in the background — no GUI required.
 - `--excluded-players` — hide certain players
 - `--excluded-titles` — hide certain song titles
 - `--excluded-artists` — hide certain artists
-- `--excluded-urls` — hide songs from specific URLs
+- `--excluded-urls` — hide songs from specific URLs (works only with MPRIS)
 
 Example:
 
@@ -68,7 +67,6 @@ See all options with `trackpresence --help`.
 
 # Future Plans
 
-- Windows API support
 - MPD player support
 - MacOS support
 
