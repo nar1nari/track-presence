@@ -17,7 +17,7 @@
 Install with Cargo package manager:
 
 ```bash
-cargo install track_presence --features {mpris/windows_media}
+cargo install trackpresence --features {mpris/windows_media}
 ```
 
 Run Track Presence:
@@ -39,7 +39,7 @@ To launch at system startup, add `trackpresence` to your autostart configuration
 If you don't want to connect to MusicBrainz to fetch album art, you can disable this feature accordingly:
 
 ```bash
-cargo install track_presence --no-default-features --features mpris
+cargo install trackpresence --no-default-features --features mpris
 ```
 
 But note that album art will not appear in rich presence.

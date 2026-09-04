@@ -1,6 +1,6 @@
 use clap::Parser;
 #[allow(unused_imports)]
-use track_presence::{
+use trackpresence::{
     app::App,
     config::Config,
     sources::{self, TrackSource},

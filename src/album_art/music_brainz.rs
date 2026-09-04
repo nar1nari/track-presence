@@ -33,7 +33,7 @@ impl AlbumArtSource for MusicBrainz {
 impl Default for MusicBrainz {
     fn default() -> Self {
         let client = Client::builder()
-            .user_agent("track_presence/0.1")
+            .user_agent("trackpresence/0.1")
             .connect_timeout(Duration::from_secs(3))
             .timeout(Duration::from_secs(5))
             .build()

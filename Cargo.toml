@@ -1,11 +1,11 @@
 [package]
-name = "track_presence"
+name = "trackpresence"
 version = "1.0.0"
 edition = "2024"
 description = "Shows your current music on Discord, with support for multiple media players"
 authors = ["nar1nari"]
 license = "MIT"
-repository = "https://github.com/nar1nari/track-presence"
+repository = "https://github.com/nar1nari/trackpresence"
 readme = "README.md"
 categories = ["multimedia::audio", "command-line-utilities"]
 keywords = ["discord", "music", "mpris"]
