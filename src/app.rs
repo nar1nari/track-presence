@@ -1,6 +1,9 @@
 use crate::{
-    album_art::AlbumArtProvider, config::Config, presentation::discord::DiscordPresenter,
-    sources::TrackSource, state::PlaybackState,
+    album_art::{AlbumArtProvider, AlbumArtSource},
+    config::Config,
+    presentation::discord::DiscordPresenter,
+    sources::TrackSource,
+    state::PlaybackState,
 };
 
 pub struct App {
@@ -11,11 +14,15 @@ pub struct App {
 }
 
 impl App {
-    pub fn new(config: Config, sources: Box<[Box<dyn TrackSource>]>) -> Self {
+    pub fn new(
+        config: Config,
+        sources: Box<[Box<dyn TrackSource>]>,
+        album_art_sources: Box<[Box<dyn AlbumArtSource>]>,
+    ) -> Self {
         Self {
             config,
             sources,
-            album_art_provider: AlbumArtProvider::default(),
+            album_art_provider: AlbumArtProvider::new(album_art_sources),
             playback_state: PlaybackState::Stopped,
         }
     }

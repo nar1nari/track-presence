@@ -1,24 +1,30 @@
-use std::{collections::HashMap, fmt::Display};
+use std::collections::HashMap;
 
-use crate::track::{ReleaseHash, Track};
+use thiserror::Error;
+
+use crate::{
+    track::{ReleaseHash, Track},
+    utils::error_chain,
+};
 
 #[cfg(feature = "musicbrainz")]
 pub mod music_brainz;
-#[cfg(feature = "musicbrainz")]
-use music_brainz::MusicBrainz;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, Error)]
 pub enum AlbumArtError {
-    Network,
-    InvalidResponse,
+    #[error("request to {url} failed: {source}")]
+    Network {
+        url: String,
+        #[source]
+        source: reqwest::Error,
+    },
+    #[error("invalid response from {url}: {reason}")]
+    InvalidResponse { url: String, reason: String },
 }
 
-impl Display for AlbumArtError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Self::Network => write!(f, "internet connection broken"),
-            Self::InvalidResponse => write!(f, "got invalid response from MusicBrainz"),
-        }
+impl PartialEq for AlbumArtError {
+    fn eq(&self, other: &Self) -> bool {
+        self.to_string() == other.to_string()
     }
 }
 
@@ -45,51 +51,44 @@ pub trait AlbumArtSource {
     fn get_album_art(&self, track: &Track) -> Result<Option<AlbumArt>, AlbumArtError>;
 }
 
-#[derive(Default)]
 pub struct AlbumArtProvider {
     cache: HashMap<ReleaseHash, AlbumArt>,
-
-    #[cfg(feature = "musicbrainz")]
-    source: MusicBrainz,
+    sources: Box<[Box<dyn AlbumArtSource>]>,
 }
 
 impl AlbumArtProvider {
+    pub fn new(sources: Box<[Box<dyn AlbumArtSource>]>) -> Self {
+        Self {
+            cache: HashMap::new(),
+            sources,
+        }
+    }
+
     pub fn get_album_art(&mut self, track: &Track) -> AlbumArt {
         let release_hash = track.release_hash();
-
         if let Some(art) = self.cache.get(&release_hash) {
             return art.clone();
         }
-
-        self.fetch_album_art(track)
+        let art = self.fetch_album_art(track);
+        self.cache.insert(release_hash, art.clone());
+        art
     }
-}
 
-#[cfg(feature = "musicbrainz")]
-impl AlbumArtProvider {
-    fn fetch_album_art(&mut self, track: &Track) -> AlbumArt {
-        match self.source.get_album_art(track) {
-            Ok(Some(art)) => {
-                self.cache.insert(track.release_hash(), art.clone());
-                art
-            }
-            Ok(None) => {
-                self.cache.insert(track.release_hash(), AlbumArt::default());
-                AlbumArt::default()
-            }
-            Err(e) => {
-                eprintln!("Failed to get album art for \"{}\": {}", track.title, e);
-                AlbumArt::default()
+    fn fetch_album_art(&self, track: &Track) -> AlbumArt {
+        for source in self.sources.iter() {
+            match source.get_album_art(track) {
+                Ok(Some(art)) => return art,
+                Ok(None) => continue,
+                Err(e) => {
+                    eprintln!(
+                        "Failed to get album art for \"{}\": {}",
+                        track.title,
+                        error_chain(&e)
+                    );
+                    continue;
+                }
             }
         }
-    }
-}
-
-#[cfg(not(feature = "musicbrainz"))]
-impl AlbumArtProvider {
-    fn fetch_album_art(&mut self, _track: &Track) -> AlbumArt {
-        self.cache
-            .insert(_track.release_hash(), AlbumArt::default());
         AlbumArt::default()
     }
 }

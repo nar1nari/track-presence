@@ -53,39 +53,47 @@ impl MusicBrainz {
             "https://musicbrainz.org/ws/2/release-group/?query={}&limit=1",
             query
         );
-
         let body = self
             .client
             .get(&url)
             .send()
-            .map_err(|_| AlbumArtError::Network)?
+            .map_err(|source| AlbumArtError::Network {
+                url: url.clone(),
+                source,
+            })?
             .text()
-            .map_err(|_| AlbumArtError::Network)?;
+            .map_err(|source| AlbumArtError::Network {
+                url: url.clone(),
+                source,
+            })?;
 
         let marker = r#"<release-group id=""#;
-
         let start = match body.find(marker) {
             Some(pos) => pos + marker.len(),
             None => return Ok(None),
         };
-
         let end = body[start..]
             .find('"')
-            .ok_or(AlbumArtError::InvalidResponse)?
+            .ok_or_else(|| AlbumArtError::InvalidResponse {
+                url: url.clone(),
+                reason: format!(
+                    "found opening `id=\"` marker but no closing quote in body: {body:.200}"
+                ),
+            })?
             + start;
-
         Ok(Some(body[start..end].to_string()))
     }
 
     fn get_album_art_url(&self, id: &str) -> Result<Option<String>, AlbumArtError> {
         let url = format!("https://coverartarchive.org/release-group/{id}/front-250");
-
         let resp = self
             .client
             .get(&url)
             .send()
-            .map_err(|_| AlbumArtError::Network)?;
-
+            .map_err(|source| AlbumArtError::Network {
+                url: url.clone(),
+                source,
+            })?;
         if resp.status().is_success() {
             Ok(Some(url))
         } else {
